@@ -1,0 +1,28 @@
+name: CI
+
+on: [push]
+
+jobs:
+    build:
+
+      runs-on: ubuntu-latest
+
+      steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.0.100
+      - run: "dotnet build Source/ -c Release"
+      - run: "dotnet publish Source/KIOT.Server.Api -c Release /p:EnvironmentName=Production"
+    
+    test:
+
+      runs-on: ubuntu-latest
+
+      steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.0.100
+      - run: "cd Source/ && dotnet restore KIOT.Server.sln && cd ../Tests/KIOT.Server.Api.Tests && dotnet test -v m"
+      
